@@ -1,0 +1,28 @@
+#include <stdio.h>
+
+int main(int argc, char *argv[]) {
+
+	int	i;
+	int 	curr_y;
+	
+
+	for ( i = 1; i < argc; i++ ) {
+	
+		curr_y = atoi(argv[i]);
+		printf("%d\n",curr_y);
+
+		if (curr_y%400 == 0 || (curr_y%100 != 0 && curr_y%4 == 0)) {
+			printf("%d\n",curr_y);
+		}
+	}
+
+	printf("\n101 as Different Formats\n\n\tOctal:\t\t %o\n",101);
+	printf("\tPercent:\t %f%%\n",101.);
+	printf("\tHexadecimal:\t %x\n",101);
+	printf("\tChar:\t\t %c\n",101);
+	printf("\tFloat:\t\t %f\n",101.);
+	printf("\tD:\t\t %d\n\n",101);
+	return 0;
+
+
+}

@@ -1,0 +1,61 @@
+#include <stdio.h>
+#define MAX_LINES 1000
+#define MAX_CHAR_PER_LINE 1000
+
+int main(int agrc, char **argv)
+{
+	printf("hello");
+	int text[MAX_LINES][MAX_CHAR_PER_LINE];
+	char *file_name = argv[1];
+	printf("%s", file_name);
+	read_file(file_name,text);
+	
+	return 0;
+
+}
+
+int read_file(char *file_r, int **target) {
+
+	printf("%s",file_r);
+	FILE *file;
+	file = fopen(file_r,"r");
+
+	int line_n = 0;
+	int char_n = 0;
+	int c = 0;
+	
+	while ((c = fgetc(file)) != EOF){
+		printf("%c", c);
+		if (c == '\n'){
+			target[line_n][char_n] = c;			
+			line_n++;
+			char_n = 0;
+		}
+		else {
+			target[line_n][char_n] = c;
+			char_n++;
+		}
+	
+	}
+
+	return 0;
+	/*read_file(text,file);
+	/*print_file(text);*/
+
+}	
+/*
+int print_file(char **text) {
+
+	int 	line_n;
+	int 	char_n;
+
+	for(line_n = 0; line_n < MAX_LINES; line_n++) {
+		for(char_n = 0; char_n < MAX_CHAR_PER_LINE; char_n++){
+			printf("%c", (char)text[line_n][char_n]);
+		}
+	}
+	
+	return 0;
+
+}
+*/
