@@ -5,23 +5,28 @@
 void alphabetize(char *text[], int nlines);
 int read_text(char ***txtptr);
 int word_comp(const void *a, const void *b);
+void print_text(char **txtptr, int len);
 
 int main(int argc, char *argv[]){
 
 	char **txtptr = (char**)malloc(sizeof(char*));
-	int len, i;
+	int len;
 
-	len = read_text(&txtptr);
-/*
-	alphabetize(txtptr,len);
-*/	
-
-
-	for(i=0;i<len;i++){
-		printf("%s\n",txtptr[i]);
-	}
+	alphabetize(txtptr,len=read_text(&txtptr));
+	print_text(txtptr,len);
 
 	return 0;
+}
+
+void print_text(char **txtptr, int len){
+
+	int i;
+
+	for(i=0;i<len;i++){
+
+		printf("%s\n",txtptr[i]);
+
+	}
 }
 
 int read_text(char ***txtptr){
