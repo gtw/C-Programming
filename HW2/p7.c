@@ -31,6 +31,9 @@ int main(int arc, char * argv[]){
 }
 
 double **dmatrix(size_t m, size_t n){
+	/*I only allocate one block for the pointers and one for
+	the values they point to.  Then I just direct the pointers
+	to the right place in that array of values*/
 
 	int i;
 	double *f_arr = (double*)malloc(sizeof(double)*m*n);

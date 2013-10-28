@@ -17,6 +17,9 @@ int main(int arc, char * argv[]){
 }
 
 double **dmatrix(size_t m, size_t n){
+	/* Note the malloc within the loop below means I am
+	individually malloc-ing every row in the matrix.  They
+	will not necessarily be contiguous. */
 
 	int i;
 	double **f = (double**)malloc(sizeof(double*)*m);
@@ -25,6 +28,8 @@ double **dmatrix(size_t m, size_t n){
 	}
 	return f;
 }
+
+/* I opted to fill and print my matrices in separate functions */
 
 void fill_matrix(double **f, size_t m, size_t n){
 

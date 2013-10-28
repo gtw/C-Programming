@@ -36,8 +36,16 @@ int my_memcpy(void *target, void *source, size_t nbytes)
 	char *c_source 			= (char*)source;
 	int  i 				= 0;
 	
-	if((tar <= src && tar + nbytes >= src)||
-		(src <= tar && src + nbytes >= tar )){
+	/* I have created integer representations of target and source's
+	address for easy comparison.  If one starts before or at the same
+	address as the beginning of the other I check whether the address 
+	n-1 bytes later overlaps the beginning of the next. I check n-1
+	bytes later because the first byte if src and target are one
+	address apart you still need to write 2 bytes of memory for an
+	overlap to occur*/ 	
+
+	if((tar <= src && tar + (nbytes-1) >= src)||
+		(src <= tar && src + (nbytes-1) >= tar )){
 		
 		return -1;
 		

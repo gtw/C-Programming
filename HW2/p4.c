@@ -7,18 +7,53 @@ int left(int i , int n);
 int right(int i , int n);
 void pushdown(int *f, int i, int n);
 void swap(int *f, int j, int k);
-void print_array(int *f, int n);
+int test_heap( int * f, int n);
 	
-int main(int argc, char *argv[]){
+int main(int argc, char * argv[])
+{
+	int result;
+	int i;
+	int n = argc - 1;
+	int * arr = allocate_array( argc, argv );
 
-	int * arr = allocate_array(argc, argv);
+	heapify( arr, n );
+	result = test_heap( arr, n );
 
-	print_array(arr,argc-1);
-	heapify(arr,argc-1);
-	
+	for( i = 0; i < n; i++ )
+		printf("%d ", arr[i]);
+	printf("\n");
+
+	if( result == 1 )
+		printf("Heap test success!\n");
+	else
+		printf("Heap test failed.\n");
+
+	free(arr);
+
 	return 0;
 }
 
+int test_heap( int * f, int n)
+{
+	int i;
+	int child_A, child_B;
+
+	for( i = 0; i < n; i++ )
+	{
+		child_A = ( 2 * i ) + 1;
+		child_B = ( 2 * i ) + 2;
+
+		if( child_A < n )
+			if( f[i] < f[child_A] )
+				return -1;
+		
+		if( child_B < n )
+			if( f[i] < f[child_B] )
+				return -1;
+	}
+
+	return 1;
+}
 
 int * allocate_array( int argc, char *argv[]){
 
@@ -32,28 +67,25 @@ int * allocate_array( int argc, char *argv[]){
 	return arr;
 }
 
-void print_array(int *f, int n){
-
-	int i;
-	
-	for(i=0;i<n;i++)
-		printf("%-6d ",f[i]);
-
-	printf("\n");
-}
-
 void heapify(int *f, int n){
 
 	int i;
 
 	for(i=(n-2)/2;i>=0;i--){
 	
-		printf("Pushing Down at Address %d of %d\n", i+1, n);
 		pushdown(f,i,n);
-		print_array(f,n);
 	
 	}
 }
+
+/* Pushdown and in fact this entire algorithm operates
+by assuming all elements in an array to the right of the given
+element are a stack, with the possible exception of that element's
+children.  It then pushes down that element should it be smaller
+than one of its children, swapping it for the larger of the two.
+This process continues until the element has no children or is larger
+than its child elements.  As mentioned in my README I am implementing
+an algorithm I found online. */
 
 void pushdown(int *f, int i, int n){
 
@@ -82,6 +114,9 @@ void swap(int *f, int j, int k){
 	f[k] = temp;
 
 }
+
+/*Left and Right determine the index of the left and right
+child elements of element i in a help of n elements */
 
 int left(int i, int n){
 

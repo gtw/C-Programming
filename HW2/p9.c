@@ -34,6 +34,6 @@ int abs_comp(const void *a, const void *b){
 
 	int *ai = (int*)a;
 	int *bi = (int*)b;
-
+	/* I make use of the abs function from stdlib */
 	return (abs(*ai) < abs(*bi)) - (abs(*ai) > abs(*bi));
 } 

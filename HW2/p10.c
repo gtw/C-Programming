@@ -40,30 +40,14 @@ int my_strncmp(char *a, char *b, int n){
 
 	int i = 0;
 
-	while(i<n){
-		if(*a == *b && *a != '\0'){
-			a++;
-			b++;
-			i++;
-		}
-		else if(*a == *b && *a == '\0'){
+	for( ; i < n && *a == *b ; a++, b++, i++){
+		if(*a == '\0')
 			return 0;
-		}
-		else if(*a == '\0'){
-			return -1;
-		}
-		else if(*b == '\0'){
-			return 1;
-		}
-		else if(*a > *b){
-			return 1;
-		}
-		else if(*a < *b){
-			return -1;
-		}
 	}
-	
-	return 0;
+	if(i == n)
+		return 0;
+	else
+		return *a - *b;
 	
 }
 
@@ -72,20 +56,13 @@ char *my_strncat(char *dest, char *src, int n){
 	int i = 0;
 	char *dest_cp = dest;
 
-	while(*dest != '\0'){
-		dest++;
-	}
+	for( ; *dest != '\0' ; dest++)
+		;
 
-	while(i< n && *src != '\0'){
-		*dest++ = *src++;
-		i++;
-	}
+	for( ; i < n && *src != '\0' ; *dest++ = *src++, i++)
+		;
 
-	if(i < n && *src == '\0'){
-
-		*dest = '\0';
-
-	}
+	*dest = '\0';
 
 	return dest_cp;
 }
@@ -93,15 +70,17 @@ char *my_strncat(char *dest, char *src, int n){
 char *my_strncpy(char *dest, char *src, int n){
 
 	int i = 0;
-	char *dest_cp =dest;
+	char *dest_cp = dest;
 
-	while(*src != '\0' && i < n){
-		*dest++ = *src++;
+	for( ; i < n && *src != '\0' ; *dest++ = *src++, i++)
+		;
+
+	/* Pads the destination string with '\0' if I try
+	to copy more letters than are in src */
+
+	while(i < n){
+		*dest++ = '\0';
 		i++;
-	}
-
-	if(i < n && *src == '\0'){
-		*dest = '\0';
 	}
 
 	return dest_cp;
@@ -122,5 +101,4 @@ char *my_strcat(char *a, char *b){
 	*a = '\0';
 	
 	return a_cp;
-
 }
