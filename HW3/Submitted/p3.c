@@ -3,19 +3,6 @@
 #include <math.h>
 
 double NR( double x0, void (*test_function)( double x, double * f, double * f_prime ), double precision);
-void test_function( double x, double * f, double * f_prime );
-
-int main(void)
-{
-	double x0 = -2.7e4;
-	double precision = .0000001; 
-
-	double root = NR( x0, test_function, precision );
-
-	printf("%f\n", root);
-	
-	return 0;
-}
 
 double NR( double x0, void (*test_function)( double x, double * f, double * f_prime), double precision){
 
@@ -37,10 +24,4 @@ double NR( double x0, void (*test_function)( double x, double * f, double * f_pr
 	printf("NO ROOT FOUND\n");
 	return -1;
 	
-}
-
-void test_function( double x, double * f, double * f_prime) {
-	
-	*f = x*x*x;
-	*f_prime = 3*x*x;
 }

@@ -10,49 +10,9 @@ typedef struct{
 typedef MapEntry * Map;
 
 int permute(void *data, int nblobs, size_t szblob, Map map);
-void print_blobs(int *my_blobs, int nblobs);
 int verify(Map map, int size);
 int mapsort(const void *a, const void *b);
 void pre_process(void *data, int nblobs, size_t szblob, Map map);
-void printMap(Map map, int size);
-
-int main(int argc, char *argv[]){
-
-	int nblobs = 10;
-	int *my_blobs = (int*)malloc(sizeof(int)*nblobs);
-	int i;
-	Map map = (Map) malloc( sizeof(MapEntry) * nblobs );
-	
-	for(i=0;i<nblobs;i++){
-		my_blobs[i] = 10+i;
-	}
-
-	map[0].indexFrom = 0;
-	map[0].indexTo = 4;
-	map[1].indexFrom = 4;
-	map[1].indexTo = 1;
-	map[2].indexFrom = 3;
-	map[2].indexTo = 0;
-	map[3].indexFrom = 0;
-	map[3].indexTo = 3;
-	map[4].indexFrom = 1;
-	map[4].indexTo = 2;
-	map[5].indexFrom = 2;
-	map[5].indexTo = 5;
-	map[6].indexFrom = 2;
-	map[6].indexTo = 6;
-	map[7].indexFrom = 2;
-	map[7].indexTo = 7;
-	map[8].indexFrom = 2;
-	map[8].indexTo = 8;
-	map[9].indexFrom = 9;
-	map[9].indexTo = 9;
-
-	print_blobs(my_blobs, nblobs);
-	permute(my_blobs, nblobs, sizeof(int), map);
-	print_blobs(my_blobs, nblobs);
-	return 0;
-}
 
 /* My permute function requires every index of the data to only be written from
 and to a single time.  Since that will not always necessarily be the case my
@@ -179,14 +139,6 @@ void pre_process(void *data, int nblobs, size_t szblob, Map map){
 	free(from_count);	
 }
 	
-
-void printMap(Map map, int size){
-	int i;
-	for(i=0;i<size;i++)
-		printf("[%d,%d] ", map[i].indexFrom, map[i].indexTo);
-	printf("\n");
-}
-
 int verify(Map map, int size){
 
 	int i;
@@ -202,16 +154,4 @@ int verify(Map map, int size){
 	}
 	free(count);
 	return 0;
-}
-
-
-
-void print_blobs(int *my_blobs, int nblobs){
-
-	int i;
-	printf("( ");
-	for(i=0;i<nblobs;i++){
-		printf("%d ", my_blobs[i]);
-	}
-	printf(")\n");
 }
