@@ -40,6 +40,8 @@ int permute(void *data, int nblobs, size_t szblob, Map map){
 	char* d = (char*)data;
 
 	if(verify(map,nblobs)==-1){
+		free(temp);
+		free(used_command);
 		return -1;
 	}
 	
@@ -74,7 +76,8 @@ int permute(void *data, int nblobs, size_t szblob, Map map){
 		memcpy(d + (map[current_index].indexTo * szblob), temp, szblob);
 		used_command[current_index] = 1;
 	}
-
+	free(temp);
+	free(used_command);
 	return 0;
 }
 
