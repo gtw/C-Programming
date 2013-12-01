@@ -118,3 +118,74 @@ int deck_shuffle(Deck * deck){
 
 	return 0;
 }
+
+int deck_destroy(Deck * deck){
+
+	deck->cards.destroy(deck->cards);
+	free(deck);
+	return 0;
+}
+
+int deck_print(Deck * deck){
+
+	int i;
+
+	deck->realign(deck);
+	
+	for(i=0;i<deck->cards.n_cards;i++){
+		val_print( (((Card*)(deck->cards.data))[i]).val);
+		suit_print( (((Card*)(deck->cards.data))[i]).suit);
+	}
+	printf("\n");
+}
+
+Card * deck_pick_card(Deck * deck){
+
+	return deck->cards.dq(&(deck->cards));
+
+}
+
+Card * deck_return_card(Deck * deck, Card * card){
+
+	return deck->cards.nq(&(deck->cards), (void*)card);
+
+}
+
+Deck * init_deck(int size, Deck * src_deck, int std_fill){
+	
+	int i, j;
+	Card *  add_card;
+	Deck * deck = (Deck*)malloc(sizeof(Deck));
+	if(deck==NULL)
+		return NULL;
+
+	if(std_deck == NULL){
+	
+		deck->cards = init_q(size, sizeof(Card));
+
+		deck->realign     = deck_realign;
+		deck->shuffle     = deck_shuffle;
+		deck->destroy     = deck_destroy;
+		deck->print       = deck_print;
+		deck->pick_card   = deck_pick_card;
+		deck->return_card = deck_return_card;
+		
+		if(std_fill == 1 && size == 52){
+			for(i=0;i<4;i++){
+				add_card->suit = i;
+				for(j=0;j<13;j++){
+					add_card->val = j;
+					deck->cards.return_card(deck->cards,add_card);
+				}
+			}
+		}	
+	}
+
+	else{
+		memcpy(deck, src_deck, sizeof(Deck));
+		deck->cards.data = (void*)malloc(sizeof(Card)*src_deck->cards.size);
+		memcpy(deck->cards.data, src_deck->cards.data, sizeof(Card)*src_deck->cards.size);
+	}
+
+	return deck;
+}

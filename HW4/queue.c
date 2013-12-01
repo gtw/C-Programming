@@ -70,6 +70,7 @@ int q_realign(Queue * queue){
 	memcpy( ((char*)(queue->data)) + (queue->item_size * (queue->size - queue->first_item)), buffer, queue->item_size * queue->first_item );
 
 	queue->first_item = 0;
+	free(buffer);
 	return 0;
 }
 

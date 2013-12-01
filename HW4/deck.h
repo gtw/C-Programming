@@ -78,5 +78,5 @@ int 	deck_destroy(Deck * deck);
 int 	deck_print(Deck * deck);
 Card *	deck_pick_card(struct deck * deck);
 int 	deck_return_card(struct deck * deck, Card * card);
-Deck *	init_deck(int size, int std_deck);
+Deck *	init_deck(int size, Deck * src_deck, int std_fill);
 #endif
