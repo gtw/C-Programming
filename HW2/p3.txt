@@ -1,0 +1,83 @@
+	a.) char *p;
+		p = "hello world";
+		p[0] = 'H';
+		
+		The below is taken directly from K&R 5.5
+	
+		"There is an important difference between these definitions: 
+		
+			char amessage[] = "now is the time"; /* an array */
+			char *pmessage = "now is the time"; /* a pointer */
+		
+		amessage is an array, just big enough to hold the sequence of characters and '\0' that initializes it. 
+		Individual characters within the array may be changed but amessage will always refer to the same storage. 
+		On the other hand, pmessage is a pointer, initialized to point to a string constant; the pointer may 
+		subsequently be modified to point elsewhere, but the result is undefined if you try to modify the string contents." 
+		
+		In other words we cannot change the contents of p because of the way we declared it.  Had we made p an array
+		"char p[];" then we would've been able to change its contents in the manner laid out in the problem.  As
+		is the values stored in p are constant and cannot be changed.
+
+	b.) char *p;
+	    *p = 3; 
+		
+		When p is declared as a char pointer it is not yet initialized to a valid address in memory.  p may contain
+		a non NULL value, but that address in memory has almost certainly not been allocated to store a character by
+		the run-time environment.  As a result, attempts to access this address by dereferencing p and setting the
+		address it points towards to a different value will result in a segmentation fault, as we are accessing memory
+		which we do not have permission to access.  In order for this code to work properly we either must malloc a char
+		in memory or declare a char and then set p equal to that character's address.
+		
+	c.) char p;         
+	    char *pptr = &p;
+	    *(pptr+2) = 'c';
+	
+		In this instance we have correctly declared a character "p" in memory to which we have access, and then have even
+		corrrectly set the char pointer "pptr" to "p"'s address.  Problems arise in the third line in which we attempt to
+		access the address in memory 2*sizeof(char) bytes after p (almost certainly 2 bytes).  While we have been given
+		access to p's address in memory by declaring p, we have no such access to neighboring addresses in memory.  Attempting
+		to do so will, as in problem b, result in a segmentation fault.
+	
+	d.) char s[] = "Hello";
+	    s = "goodbye";     
+	
+		In the first line we have set the array of characters "s" to the string "Hello".  This declaration results in the
+		creation of a 6 char array in memory, one for each letter in the word "Hello" and an additional char for the '\0'
+		character which terminates strings.  In the subsequent step we attempt to overwrite this string with the word
+		"goodbye", which will contain 8 total letters, one for each in "goodbye" plus an additional '\0' terminating character.
+		Since this string is larger than the space allocated for s, this overwrite will run past the memory to which we were
+		granted access in "s"'s declaration and will result in a segmentation fault.
+	
+	e.)	int i,j;
+	    int* iptr, jptr;
+	    iptr = &i;
+	    jptr = &j;
+	
+		jptr needs its own * in the variable declaration (int *iptr, *jptr;). At the moment it is declared as an int, not
+		a pointer to an int, and so jptr will not function as a pointer to j's address as the programmer likely intended 
+		in line 4.  You will not be able to dereference this variable or perform pointer arithmetic.
+	
+	f.) char *p;
+	    strcpy(p, "hello world");
+	
+		p is initialized but the area it is pointing to in memory is a randomly generated value and the runtime environment
+		has almost certainly not granted access to this address.  When strcpy attempts to write to p, it will generate a
+		segmentation fault since we are accessing memory to  which we haven't been given access.
+	
+	g.) int *fptr;
+	    fptr = 1;
+	
+		As it is currently written the second line of this code sets the address that fptr points towards to "1".  It is
+		almost certain that the programmer rather intended to set the value of the integer stored at the address fptr points
+		towards to 1.  In order to do this she should have typed "*fptr = 1".  However, even this command would create a
+		segmentation fault as the code is currently written, since *fptr has not been initialized to a valid address in memory.
+		To change what value fptr points to it must both point to a valid address in memory to which the runtime environment
+		has granted access, AND it must be properly dereferenced using the "*" character.
+		
+	h.) char *f[100];
+	    f[0] = getchar();
+		
+		In the first line f is created as an array of 100 pointers to characters, not as an array of 100 characters.  As a result
+		the subsequent line is errantly trying to assign the first value in this array to a character, when in fact it is a pointer
+		to a character.  In order to properly declare an array of characters you would simply remove the "*" character in the
+		first line of the code above.
