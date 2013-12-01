@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ifndef DECK_H
+#define DECK_H
 
 typedef enum suit{
 
@@ -63,11 +62,8 @@ Hand * 	hand_init(int ncards);
 
 typedef struct deck{
 
-	Card * 	cards;
-	int 	size;
-	int 	cards_in_deck;
-	int 	first_card;
-	int 	(*sort)(struct deck * deck);
+	Queue  	cards;
+	int 	(*realign)(struct deck * deck);
 	int 	(*shuffle)(struct deck * deck);
 	int 	(*destroy)(struct deck * deck);
 	int 	(*print)(struct deck * deck);
@@ -76,9 +72,11 @@ typedef struct deck{
 
 } Deck;
 
-int 	deck_sort(Deck * deck);
+int 	deck_realign(Deck * deck);
 int 	deck_shuffle(Deck * deck);
 int 	deck_destroy(Deck * deck);
 int 	deck_print(Deck * deck);
-Card *	pick_card(struct deck * deck);
-int 	return_card(struct deck * deck, Card * card);
+Card *	deck_pick_card(struct deck * deck);
+int 	deck_return_card(struct deck * deck, Card * card);
+Deck *	init_deck(int size, int std_deck);
+#endif

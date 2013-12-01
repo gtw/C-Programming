@@ -58,6 +58,21 @@ int q_destroy(Queue * queue){
         return 0;
 }                
 
+int q_realign(Queue * queue){
+
+	void * buffer;
+	if(queue->first_item == 0)
+		return 0;
+
+	buffer = (void*)malloc(queue->item_size * queue->first_item);
+	memcpy(buffer, queue->data, queue->item_size * queue->first_item);
+	memmove(queue->data, ((char*)(queue->data)) + (queue->item_size * queue->first_item), queue->item_size * (queue->size - queue->first_item));
+	memcpy( ((char*)(queue->data)) + (queue->item_size * (queue->size - queue->first_item)), buffer, queue->item_size * queue->first_item );
+
+	queue->first_item = 0;
+	return 0;
+}
+
 Queue * init_q(int size, size_t item_size){
 
         Queue * queue = (Queue*)malloc(sizeof(Queue));
@@ -71,6 +86,7 @@ Queue * init_q(int size, size_t item_size){
         queue->dq               = q_dq;
         queue->peek             = q_peek;
         queue->destroy		= q_destroy;
+	queue->realign		= q_realign;	
 	
 	return queue;
 }
