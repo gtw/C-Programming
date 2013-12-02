@@ -1,22 +1,34 @@
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 #include "deck.h"
 
 int main(int argc, char *argv[]){
 
 	int i;
-	Hand * new_hand = hand_init(13);	
-	Deck * deck = deck_init(52,NULL,1);
 
-	for(i=0;i<13;i++){
-		new_hand->cards[i].val = i;
-		new_hand->cards[i].suit = HEARTS;
-	}
+	Hand * hand_a = hand_init(5);
+	Hand * hand_b = hand_init(5);	
+	Deck * deck = init_deck(52,NULL,1);
 
-	new_hand->print(new_hand);
-
-	deck->print(deck);
+	srand(time(NULL));
+	
 	deck->shuffle(deck);
 	deck->print(deck);
+
+	for(i=0; i<6; i++){
+		hand_a->add(hand_a, deck->pick_card(deck));
+		hand_b->add(hand_b, deck->pick_card(deck));
+	}
+
+	hand_a->print(hand_a);
+	hand_b->print(hand_b);
+
+	deck->print(deck);
+	hand_a->destroy(hand_a);
+	hand_b->destroy(hand_b);
+	deck->destroy(deck);
+
 	return 0;
 }
 

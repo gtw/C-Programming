@@ -9,9 +9,9 @@ int card_comp(const void *a, const void *b){
 	Card * bi = (Card*)b;
 
 	if(ai->val != bi->val)
-		return((ai->val > bi->val) - (ai->val < bi->val));
+		return((ai->val < bi->val) - (ai->val > bi->val));
 	else
-		return((ai->suit > bi->suit) - (ai->suit < bi->suit));
+		return((ai->suit < bi->suit) - (ai->suit > bi->suit));
 
 }
  
@@ -24,7 +24,7 @@ int hand_sort(Hand * hand){
 
 int val_print(Val val){
 
-	if(val<9)
+	if(val<9 && val>-1)
 		printf("%d",val+2);
 	else if(val==J)
 		printf("J");
@@ -79,7 +79,50 @@ int hand_destroy(Hand * hand){
 	return 0;
 }
 
+Card hand_remove(Hand * hand, int n){
+
+	Card return_card;
+
+	if(n > hand->cards_in_hand){
+		return_card.val = ERR_V;
+		return_card.suit = ERR_S;
+		return return_card;
+	}
+
+	return_card = hand->cards[n-1];
+	
+	if(n < hand->size)
+		memcpy(&((hand->cards)[n-1]), &((hand->cards)[n]), sizeof(Card) * ((hand->size - n) + 1));
+	
+	hand->cards[hand->size - 1].val = ERR_V;
+	hand->cards[hand->size - 1].suit = ERR_S;
+
+	hand->cards_in_hand--;
+
+	return return_card;
+}
+
+int hand_add(Hand * hand, Card card){
+
+	if(hand->cards_in_hand == hand->size){
+		printf("Hand already full, card has not been added\n");
+		return 1;
+	}
+	
+	if(card.val == ERR_V || card.suit == ERR_S){
+		printf("Cannot add blank card to hand\n");
+		return 1;
+	}	
+
+	hand->cards[hand->cards_in_hand] = card;
+	hand->cards_in_hand++;
+
+	return 0;
+} 
+	 
 Hand * hand_init(int ncards){
+
+	int i;
 
 	Hand * new_hand = (Hand*)malloc(sizeof(Hand));
 	
@@ -89,6 +132,13 @@ Hand * hand_init(int ncards){
 	new_hand->sort          = hand_sort;
 	new_hand->print         = hand_print;	
 	new_hand->destroy       = hand_destroy;
+	new_hand->add		= hand_add;
+	new_hand->remove	= hand_remove;
+
+	for(i=0; i<ncards; i++){
+		new_hand->cards[i].val = ERR_V;
+		new_hand->cards[i].suit = ERR_S;
+	}
 
 	return new_hand;
 }
@@ -102,16 +152,16 @@ int deck_realign(Deck * deck){
 int deck_shuffle(Deck * deck){
 
 	int i, j;
-
+	Card * d = (Card*)(deck->cards->data);
 	Card * buffer = (Card*)malloc(sizeof(Card));
 
-	deck->cards.realign(deck->cards);
+	deck->realign(deck);
 	
-	for(j=deck->cards.n_items, j>0; j--){
-		i = rand()%j;
-		memcpy(buffer, ((char*)(deck->cards.data)) + (sizeof(Card) * i), sizeof(Card));
-		memcpy( ((char*)(deck->cards.data)) + (sizeof(Card) * i), ((char*)(deck->cards.data)) + (sizeof(Card) * j), sizeof(Card)); 				
-		memcpy( ((char*)(deck->cards.data)) + (sizeof(Card) * j), buffer, sizeof(Card));
+	for(j = (deck->cards->n_items) - 1; j>0; j--){
+		i = rand()%(j+1);
+		memcpy(buffer, &(d[i]), sizeof(Card));
+		memcpy(&(d[i]), &(d[j]), sizeof(Card)); 				
+		memcpy(&(d[j]), buffer, sizeof(Card)); 				
 	}
 
 	free(buffer);
@@ -121,7 +171,7 @@ int deck_shuffle(Deck * deck){
 
 int deck_destroy(Deck * deck){
 
-	deck->cards.destroy(deck->cards);
+	deck->cards->destroy(deck->cards);
 	free(deck);
 	return 0;
 }
@@ -132,34 +182,39 @@ int deck_print(Deck * deck){
 
 	deck->realign(deck);
 	
-	for(i=0;i<deck->cards.n_cards;i++){
-		val_print( (((Card*)(deck->cards.data))[i]).val);
-		suit_print( (((Card*)(deck->cards.data))[i]).suit);
+	for(i=0;i<deck->cards->n_items;i++){
+		val_print( (((Card*)(deck->cards->data))[i]).val);
+		suit_print( (((Card*)(deck->cards->data))[i]).suit);
+		printf(" ");
 	}
 	printf("\n");
+
+	return 0;
 }
 
-Card * deck_pick_card(Deck * deck){
+Card deck_pick_card(Deck * deck){
 
-	return deck->cards.dq(&(deck->cards));
+	return *((Card*)(deck->cards->dq(deck->cards)));
 
 }
 
-Card * deck_return_card(Deck * deck, Card * card){
+int deck_return_card(Deck * deck, Card card){
 
-	return deck->cards.nq(&(deck->cards), (void*)card);
+	return deck->cards->nq(deck->cards, &card);
 
 }
 
 Deck * init_deck(int size, Deck * src_deck, int std_fill){
 	
 	int i, j;
-	Card *  add_card;
+	Card add_card;
 	Deck * deck = (Deck*)malloc(sizeof(Deck));
-	if(deck==NULL)
+	if(deck==NULL){
+		free(deck);
 		return NULL;
+	}
 
-	if(std_deck == NULL){
+	if(src_deck == NULL){
 	
 		deck->cards = init_q(size, sizeof(Card));
 
@@ -172,10 +227,10 @@ Deck * init_deck(int size, Deck * src_deck, int std_fill){
 		
 		if(std_fill == 1 && size == 52){
 			for(i=0;i<4;i++){
-				add_card->suit = i;
+				add_card.suit = i;
 				for(j=0;j<13;j++){
-					add_card->val = j;
-					deck->cards.return_card(deck->cards,add_card);
+					add_card.val = j;
+					deck->return_card(deck,add_card);
 				}
 			}
 		}	
@@ -183,8 +238,8 @@ Deck * init_deck(int size, Deck * src_deck, int std_fill){
 
 	else{
 		memcpy(deck, src_deck, sizeof(Deck));
-		deck->cards.data = (void*)malloc(sizeof(Card)*src_deck->cards.size);
-		memcpy(deck->cards.data, src_deck->cards.data, sizeof(Card)*src_deck->cards.size);
+		deck->cards->data = (void*)malloc(sizeof(Card)*src_deck->cards->size);
+		memcpy(deck->cards->data, src_deck->cards->data, sizeof(Card)*src_deck->cards->size);
 	}
 
 	return deck;
