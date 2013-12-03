@@ -9,4 +9,7 @@ typedef struct hand_rank {
 	unsigned short rank;
 
 } Hand_rank;
+
+Hand_rank * import_rank_data(void);
+
 #endif
