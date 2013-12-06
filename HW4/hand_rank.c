@@ -27,29 +27,37 @@ Hand_rank * import_rank_data(void){
 	return poker_hands;
 }
 
-int hand_rank_comp(const void *key, const void *datum){
-
-	long hand_key = *((Hand*)key);
-	Hand_rank * hand_datum = (*Hand_rank)datum;
-
-	return ((hand_key > hand_datum->key) - (hand_key < hand_datum->key));
-}
-
-long hand_key(Hand * hand){
+long get_hand_key(Hand * hand){
 
 	long key = 1;
+	int flush = -1;
 	int i;
 
 	for(i=0;i<hand->size;i++){
 		key *= prime_val(hand->cards[i]);
+		if(i>0){
+			if(hand->cards[i].suit != hand->cards[i-1].suit){
+				flush = 1;
+			}
+		}	
+			
 	}
 
-	return key;
+	
+	return key*flush;
+}
+
+int hand_rank_comp(const void *hand_key, const void *hand_rank){
+
+	long hand_k = *((long*)hand_key);
+	long hand_rank_k = ((Hand_rank*)hand_rank)->key;
+
+	return ((hand_k > hand_rank_k) - (hand_k < hand_rank_k));
 }
 
 short prime_val(Card card){
 
-	switch(Card.val){
+	switch(card.val){
 
 		case _2: return 2; break;
 		case _3: return 3; break;
@@ -63,15 +71,17 @@ short prime_val(Card card){
 		case J: return 29; break;
 		case Q: return 31; break;
 		case K: return 37; break;
-		case A: return 39; break;
+		case A: return 41; break;
 		default: return 0;
 
 	}
+	return 0;
 }
 
-Hand_rank * rank_hand(Hand hand, Hand_rank * rank_data){
- 
-	return bsearch(Hand, rank_data, 7462, sizeof(Hand_rank), hand_rank_comp);
+Hand_rank * rank_hand(Hand * hand, Hand_rank * rank_data){
+
+	long hand_key = get_hand_key(hand); 
+	return bsearch(&hand_key, rank_data, 7462, sizeof(Hand_rank), hand_rank_comp);
 
 }
 /*

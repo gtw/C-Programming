@@ -7,7 +7,6 @@
 int main(int argc, char *argv[]){
 
 	int i;
-	long hand_key;
 
 	Hand_rank * poker_hands = import_rank_data();
 
@@ -19,17 +18,18 @@ int main(int argc, char *argv[]){
 	
 	deck->shuffle(deck);
 
-	for(i=0; i<6; i++){
+	for(i=0; i<5; i++){
 		hand_a->add(hand_a, deck->pick_card(deck));
 		hand_b->add(hand_b, deck->pick_card(deck));
 	}
 
 	hand_a->print(hand_a);
-	printf("%s\n",rank_hand(hand_a, poker_hands)->desc);
+	printf("%s %f\n",rank_hand(hand_a, poker_hands)->desc, rank_hand(hand_a, poker_hands)->cumulative_prob);
 	hand_b->print(hand_b);
-
+	printf("%s %f\n",rank_hand(hand_b, poker_hands)->desc, rank_hand(hand_b, poker_hands)->cumulative_prob);
+/*
 	deck->print(deck);
-	hand_a->destroy(hand_a);
+*/	hand_a->destroy(hand_a);
 	hand_b->destroy(hand_b);
 	deck->destroy(deck);
 	free(poker_hands);
