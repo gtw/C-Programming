@@ -2,10 +2,14 @@
 #include <time.h>
 #include <stdlib.h>
 #include "deck.h"
+#include "hand_rank.h"
 
 int main(int argc, char *argv[]){
 
 	int i;
+	long hand_key;
+
+	Hand_rank * poker_hands = import_rank_data();
 
 	Hand * hand_a = hand_init(5);
 	Hand * hand_b = hand_init(5);	
@@ -14,7 +18,6 @@ int main(int argc, char *argv[]){
 	srand(time(NULL));
 	
 	deck->shuffle(deck);
-	deck->print(deck);
 
 	for(i=0; i<6; i++){
 		hand_a->add(hand_a, deck->pick_card(deck));
@@ -22,12 +25,14 @@ int main(int argc, char *argv[]){
 	}
 
 	hand_a->print(hand_a);
+	printf("%s\n",rank_hand(hand_a, poker_hands)->desc);
 	hand_b->print(hand_b);
 
 	deck->print(deck);
 	hand_a->destroy(hand_a);
 	hand_b->destroy(hand_b);
 	deck->destroy(deck);
+	free(poker_hands);
 
 	return 0;
 }

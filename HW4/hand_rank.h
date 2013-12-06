@@ -11,5 +11,8 @@ typedef struct hand_rank {
 } Hand_rank;
 
 Hand_rank * import_rank_data(void);
-
+int hand_rank_comp(const void *key, const void *datum);
+long hand_key(Hand * hand);
+short prime_val(Card card);
+Hand_rank * rank_hand(Hand hand, Hand_rank * rank_data); 
 #endif

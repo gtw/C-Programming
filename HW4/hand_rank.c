@@ -27,6 +27,54 @@ Hand_rank * import_rank_data(void){
 	return poker_hands;
 }
 
+int hand_rank_comp(const void *key, const void *datum){
+
+	long hand_key = *((Hand*)key);
+	Hand_rank * hand_datum = (*Hand_rank)datum;
+
+	return ((hand_key > hand_datum->key) - (hand_key < hand_datum->key));
+}
+
+long hand_key(Hand * hand){
+
+	long key = 1;
+	int i;
+
+	for(i=0;i<hand->size;i++){
+		key *= prime_val(hand->cards[i]);
+	}
+
+	return key;
+}
+
+short prime_val(Card card){
+
+	switch(Card.val){
+
+		case _2: return 2; break;
+		case _3: return 3; break;
+		case _4: return 5; break;
+		case _5: return 7; break;
+		case _6: return 11; break;
+		case _7: return 13; break;
+		case _8: return 17; break;
+		case _9: return 19; break;
+		case _10: return 23; break;
+		case J: return 29; break;
+		case Q: return 31; break;
+		case K: return 37; break;
+		case A: return 39; break;
+		default: return 0;
+
+	}
+}
+
+Hand_rank * rank_hand(Hand hand, Hand_rank * rank_data){
+ 
+	return bsearch(Hand, rank_data, 7462, sizeof(Hand_rank), hand_rank_comp);
+
+}
+/*
 int main(int argc, char* argv[]){
 
 	int i;
@@ -39,4 +87,4 @@ int main(int argc, char* argv[]){
 
 	free(poker_hands);
 	return 0;
-}
+}*/
