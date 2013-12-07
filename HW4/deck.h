@@ -2,7 +2,7 @@
 #define DECK_H
 
 #include "queue.h"
-
+/*comment*/
 typedef enum suit{
 
 	ERR_S = -1,
