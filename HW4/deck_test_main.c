@@ -16,30 +16,41 @@ int main(int argc, char *argv[]){
 	Hand * hand_b = hand_init(5);	
 	Deck * deck = init_deck(52,NULL,1);
 
-	for(i=0;i<5;i++){
+/*	for(i=0;i<5;i++){
 	
 		remove_cards[i].val = i+3;
 		remove_cards[i].suit = HEARTS;
 
 	}
-/*
+
 	deck->print(deck);
 	printf("Removing 5 Hearts from Deck\n");
 	deck_remove_cards(deck, remove_cards, 5);
 	deck->print(deck);
 */
 	srand(time(NULL));
-	
+/*	
 	deck->shuffle(deck);
 
 	for(i=0; i<5; i++){
 		hand_a->add(hand_a, deck->pick_card(deck));
 		hand_b->add(hand_b, deck->pick_card(deck));
 	}
-
+*/	
+	hand_a->cards[0].val = _10;
+	hand_a->cards[1].val = J;
+	hand_a->cards[2].val = Q;
+	hand_a->cards[3].val = K;
+	hand_a->cards[4].val = A;
+	hand_a->cards[0].suit = CLUBS;
+	hand_a->cards[1].suit = DIAMONDS;
+	hand_a->cards[2].suit = SPADES;
+	hand_a->cards[3].suit = HEARTS;
+	hand_a->cards[4].suit = HEARTS;
 	hand_a->print(hand_a);
 	printf("%s %f\n",rank_hand(hand_a, poker_hands)->desc, rank_hand(hand_a, poker_hands)->cumulative_prob);
-	print_recommendation(mc_recommend(hand_a,poker_hands,1),0);
+	print_recommendation(mc_recommend(hand_a, poker_hands, 100000), 0);
+
 /*
 	print_recommendation(mc_recommend(hand_b,poker_hands,300),0);
 	hand_b->print(hand_b);

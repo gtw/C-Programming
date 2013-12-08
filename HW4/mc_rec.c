@@ -10,8 +10,9 @@ short mc_recommend(Hand * hand, Hand_rank * poker_hands, int iterations){
 	double 	highest_score = 0.0; 
 	double 	trial_score;
 	Deck *	mc_deck = init_deck(52,NULL,1);
-	
-	deck_remove_cards(mc_deck, hand->cards, 5);
+
+	hand->sort(hand);
+	deck_remove_cards(mc_deck, hand->cards, hand->size);
 	mc_deck->shuffle(mc_deck);
 	
 	for(trial_recommendation = 0; trial_recommendation < 32; trial_recommendation++){
@@ -57,7 +58,8 @@ double score_trial_rec(short trial_recommendation, Hand * hand, Hand_rank * poke
 		
 		for(i=0; i<iterations; i++){
 			quick_shuffle(deck, removed_cards_count, buffer);
-			memcpy(first_opening, deck->cards->data, sizeof(Card) * removed_cards_count);
+	/*		deck->print(deck);
+	*/		memcpy(first_opening, deck->cards->data, sizeof(Card) * removed_cards_count);
 			score = score + ((rank_hand(hand, poker_hands))->cumulative_prob);	
 		}
 	}
@@ -73,9 +75,12 @@ void	quick_shuffle(Deck * deck, int n_cards, Card * buffer){
 
 	int i;
 	Card *c = (Card*)deck->cards->data;
+	int n_items = deck->cards->n_items;
+	int r;
 
 	for(i=0;i<n_cards;i++){
-		card_swap(&(c[i]), &(c[rand() % (deck->cards->n_items +1)]), buffer);
+		r = rand();
+		card_swap(&(c[i]), &(c[r % (n_items)]), buffer);
 	}
 }			
 						
