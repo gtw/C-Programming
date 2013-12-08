@@ -194,7 +194,7 @@ int deck_realign(Deck * deck){
 /* 	Simple Card Swapper.  You need to pass in your own
 	buffer region to avoid constant malloc/freeing */
 
-void card_swap(Card *card_a, Card *card_b, Card * buffer);
+void card_swap(Card *card_a, Card *card_b, Card * buffer){
 	
 	memcpy(buffer, card_a, sizeof(Card));
 	memcpy(card_a, card_b, sizeof(Card)); 				
