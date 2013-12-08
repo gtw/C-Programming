@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]){
 
-	int i;
+	int i, recommendation[5];
 	Card * remove_cards = (Card*)malloc(sizeof(Card)*5);
 	
 	Hand_rank * poker_hands = import_rank_data();
@@ -38,8 +38,10 @@ int main(int argc, char *argv[]){
 
 	hand_a->print(hand_a);
 	printf("%s %f\n",rank_hand(hand_a, poker_hands)->desc, rank_hand(hand_a, poker_hands)->cumulative_prob);
+	print_recommendation(mc_recommend(hand_a,poker_hands,300),0);
 	hand_b->print(hand_b);
 	printf("%s %f\n",rank_hand(hand_b, poker_hands)->desc, rank_hand(hand_b, poker_hands)->cumulative_prob);
+	print_recommendation(mc_recommend(hand_b,poker_hands,300),0);
 
 	hand_a->remove(hand_a,2,0);
 	hand_b->remove(hand_b,2,1);

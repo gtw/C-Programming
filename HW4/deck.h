@@ -84,4 +84,6 @@ Card 	deck_pick_card(struct deck * deck);
 int 	deck_return_card(struct deck * deck, Card card);
 Deck *	init_deck(int size, Deck * src_deck, int std_fill);
 int	deck_remove_cards(Deck * deck, Card * cards, int n);
+void	card_swap(Card *card_a, Card *card_b, Card *buffer);
+
 #endif

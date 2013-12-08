@@ -191,6 +191,16 @@ int deck_realign(Deck * deck){
 
 }
 
+/* 	Simple Card Swapper.  You need to pass in your own
+	buffer region to avoid constant malloc/freeing */
+
+void card_swap(Card *card_a, Card *card_b, Card * buffer);
+	
+	memcpy(buffer, card_a, sizeof(Card));
+	memcpy(card_a, card_b, sizeof(Card)); 				
+	memcpy(card_b, buffer, sizeof(Card)); 				
+}
+
 /*	Simply O(n) algorithm that shuffles the deck.  Relies on the fact that
 	the underlying data structure is an array. Random numbers between
 	0 and the total number of cards in the deck are generated.  Then the
@@ -213,12 +223,8 @@ int deck_shuffle(Deck * deck){
 	
 	for(j = (deck->cards->n_items) - 1; j>0; j--){
 		i = rand()%(j+1);
-		memcpy(buffer, &(d[i]), sizeof(Card));
-		memcpy(&(d[i]), &(d[j]), sizeof(Card)); 				
-		memcpy(&(d[j]), buffer, sizeof(Card)); 				
+		card_swap(&(d[i]), &(d[j]), buffer);
 	}
-
-	free(buffer);
 
 	return 0;
 }
