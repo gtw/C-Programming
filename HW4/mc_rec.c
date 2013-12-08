@@ -40,8 +40,8 @@ double score_trial_rec(short trial_recommendation, Hand * hand, Hand_rank * poke
 		if(trial_recommendation & 1){
 			hand->remove(hand,i,0);
 			removed_cards_count++;
-			trial_recommendation = trial_recommendation>>1;
 		}
+		trial_recommendation = trial_recommendation>>1;		
 	}
 	
 	/* If all cards remain simply return this hand's value */
@@ -63,6 +63,8 @@ double score_trial_rec(short trial_recommendation, Hand * hand, Hand_rank * poke
 	}
 
 	memcpy(hand->cards, copy_cards, sizeof(Card) * hand->size);
+	free(copy_cards);
+	free(buffer);
 	
 	return (score / (double)iterations);
 }

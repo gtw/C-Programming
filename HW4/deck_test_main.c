@@ -37,9 +37,9 @@ int main(int argc, char *argv[]){
 		hand_b->add(hand_b, deck->pick_card(deck));
 	}
 
-	print_recommendation(mc_recommend(hand_a,poker_hands,100000),0);
 	hand_a->print(hand_a);
 	printf("%s %f\n",rank_hand(hand_a, poker_hands)->desc, rank_hand(hand_a, poker_hands)->cumulative_prob);
+	print_recommendation(mc_recommend(hand_a,poker_hands,1),0);
 /*
 	print_recommendation(mc_recommend(hand_b,poker_hands,300),0);
 	hand_b->print(hand_b);
