@@ -23,7 +23,7 @@ Hand_rank * import_rank_data(void){
 		poker_hands[i].cumulative_prob = atof(cumulative_prob);
 		poker_hands[i].rank = atoi(rank);
 	}
-
+	
 	return poker_hands;
 }
 
@@ -80,21 +80,8 @@ short prime_val(Card card){
 
 Hand_rank * rank_hand(Hand * hand, Hand_rank * rank_data){
 
-	long hand_key = get_hand_key(hand); 
-	return bsearch(&hand_key, rank_data, 7462, sizeof(Hand_rank), hand_rank_comp);
+	long hand_key = get_hand_key(hand);
+/*	hand->print(hand);
+*/	return bsearch(&hand_key, rank_data, 7462, sizeof(Hand_rank), hand_rank_comp);
 
 }
-/*
-int main(int argc, char* argv[]){
-
-	int i;
-	
-	Hand_rank * poker_hands = import_rank_data();
-
-	for(i=7461;i>7451;i--){
-		printf("%ld %s %f %d\n", poker_hands[i].key, poker_hands[i].desc, poker_hands[i].cumulative_prob, poker_hands[i].rank);
-	}
-
-	free(poker_hands);
-	return 0;
-}*/

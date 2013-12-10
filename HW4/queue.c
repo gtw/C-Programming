@@ -30,7 +30,7 @@ void * q_dq(Queue * queue){
         memcpy(dq_item, ((char*)(queue->data)) + (queue->item_size * queue->first_item), queue->item_size);
         memset( ((char*)(queue->data)) + (queue->item_size * queue->first_item), 0, queue->item_size);
         queue->first_item = (queue->first_item + 1)%(queue->size);
-        queue->n_items--;
+        (queue->n_items)--;
         
         return dq_item;
 }

@@ -54,14 +54,14 @@ typedef struct hand {
 	int	(*print)(struct hand * hand);
 	int	(*destroy)(struct hand * hand);	
 	int	(*add)(struct hand * hand, Card card);
-	Card 	(*remove)(struct hand * hand, int n);
+	Card 	(*remove)(struct hand * hand, int n, int sort_ind);
 } Hand;
 
 int 	hand_sort(Hand * hand);
 int 	hand_print(Hand * hand);
 int 	hand_destroy(Hand * hand);
 int 	hand_add(struct hand * hand, Card card);
-Card 	hand_remove(struct hand * hand, int n);
+Card 	hand_remove(struct hand * hand, int n, int sort_ind);
 Hand * 	hand_init(int ncards);
 
 typedef struct deck{
@@ -84,4 +84,7 @@ Card 	deck_pick_card(struct deck * deck);
 int 	deck_return_card(struct deck * deck, Card card);
 int	deck_remove_cards(struct deck * deck, Card * cards, int n_cards);
 Deck *	init_deck(int size, Deck * src_deck, int std_fill);
+int	deck_remove_cards(Deck * deck, Card * cards, int n);
+void	card_swap(Card *card_a, Card *card_b, Card *buffer);
+
 #endif
