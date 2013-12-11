@@ -177,7 +177,7 @@ void	table_new_cards(Table * table){
 	for(i = 0; i < table->n_players; i++){
 		sleep(WAIT);
 		if(p[i]->fold == 0){
-			recommendation = mc_recommend(p[i]->hand, table->poker_hands, table->iterations);
+			recommendation = mc_recommend(p[i]->hand, table->poker_hands, table->iterations, poker_hand_rec);
 			if(p[i]->human == 0){
 				removed_count = remove_rec_cards(recommendation, p[i]->hand, table->deck);
 				printf("%s has received %d new cards.\n", p[i]->name, removed_count);

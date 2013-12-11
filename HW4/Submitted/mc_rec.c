@@ -4,7 +4,7 @@
 #include "hand_rank.h"
 #include "mc_rec.h"
 
-short mc_recommend(Hand * hand, Hand_rank * poker_hands, int iterations){
+short mc_recommend(Hand * hand, Hand_rank * poker_hands, int iterations, double (*scoring_function)(short trial_num, Hand * hand, void * scoring_data, Deck * deck, int iterations)){
 
 	short	recommendation, trial_recommendation;
 	double 	highest_score = 0.0; 
@@ -17,7 +17,7 @@ short mc_recommend(Hand * hand, Hand_rank * poker_hands, int iterations){
 	
 	for(trial_recommendation = 0; trial_recommendation < 32; trial_recommendation++){
 
-		trial_score = score_trial_rec(trial_recommendation, hand, poker_hands, mc_deck, iterations);
+		trial_score = scoring_function(trial_recommendation, hand, (void*)poker_hands, mc_deck, iterations);
 
 		/* 	I leave to you, dear grader, the challenge of figuring out why the hell
 			this next line is necessary.  I sure as hell can't figure it out, but apparently, something
@@ -36,14 +36,28 @@ short mc_recommend(Hand * hand, Hand_rank * poker_hands, int iterations){
 	return recommendation;
 }
 
-double score_trial_rec(short trial_recommendation, Hand * hand, Hand_rank * poker_hands, Deck * deck, int iterations){
+double random_rec(short trial_recommendation, Hand * hand, void * scoring_data, Deck * deck, int iterations){
+
+	int i;
+	double score = 0.0;
+	
+	for(i = 0; i < iterations; i++){
+		score += (double)rand()/(double)RAND_MAX;
+	}
+
+	return score;
+}
+
+double poker_hand_rec(short trial_recommendation, Hand * hand, void * scoring_data, Deck * deck, int iterations){
 
 	int removed_cards_count = 0;
-	double score = 0;
+	double score = 0.0;
 	int i;
 	Card * copy_cards = (Card*)malloc(sizeof(Card) * hand->size);
 	Card * buffer = (Card*)malloc(sizeof(Card));
 	Card * first_opening;
+
+	Hand_rank *poker_hands = (Hand_rank*)scoring_data;
 	
 	memcpy(copy_cards, hand->cards, sizeof(Card) * hand->size);
 

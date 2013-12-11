@@ -86,9 +86,11 @@ int main(int c, char * argv[]){
 		table->deck->shuffle(table->deck);
 		printf("Press Enter to Begin Next Hand");
 		user_letter();	
-		printf("\n\nBeginning New Hand\n\n");
+		printf("\n**********************************************************************************\n");
+		printf("\nBeginning New Hand\n\n");
 		printf("Current Standings:\n\n");	
 		table_print(table, 0);
+		printf("\n**********************************************************************************\n");
 		printf("\n");
 		sleep(WAIT);	
 	
@@ -100,20 +102,24 @@ int main(int c, char * argv[]){
 
 		sleep(WAIT);
 		
-		printf("Beginning First Round of Betting\n\n");
+		printf("Beginning First Round of Betting\n");
+		printf("\n**********************************************************************************\n");
 		table_bet(table);
 
 		if(table->players_n_folded > 1){
 			
-			printf("\nExchanging Cards\n\n");
+			printf("\n**********************************************************************************\n");
+			printf("\nExchanging Cards...\n\n");
 			table_new_cards(table);
 			
 			table_zero_bets(table);
 			
+			printf("\n**********************************************************************************\n");
 			printf("\nBeginning Second Round of Betting\n\n");
 			table_bet(table);
 		}
 
+		printf("\n**********************************************************************************\n");
 		printf("\nAll rounds of betting are complete.  Revealing final hands\n\n");
 	
 		sleep(2);
@@ -121,6 +127,8 @@ int main(int c, char * argv[]){
 		table_print(table, 1);
 
 		table_winner(table);
+		
+		printf("\n**********************************************************************************\n");
 	
 		table_return_cards(table);
 		
