@@ -54,6 +54,8 @@ void	table_bet(Table * table){
 	Player ** p = table->players;
 	int i = 0;
 
+	table_zero_bets(table);
+
 	while(no_raise < table->n_players){
 		
 		i = i%table->n_players;	
@@ -83,6 +85,7 @@ void	table_bet(Table * table){
 			if(current_bet != -1){	
 				table->pot += (current_bet - p[i]->current_bet);
 				p[i]->chips = p[i]->chips - (current_bet - p[i]->current_bet);
+				p[i]->current_bet = current_bet;
 			}
 
 			if(p[i]->chips <= 0 && p[i]->fold == 0){
@@ -101,10 +104,14 @@ void	table_bet(Table * table){
 	}
 }
 
+/*	Determines highest ranked hand, then how many people have that hand, then distributes evn shares of
+	the pot to all players with that hand.  Resets pot to zero.  Note that the use of kickers in my scoring
+	makes ties extremely rare. */
+
 void	table_winner(Table * table){
 
 	int i;
-	int winner;
+	int winner_count = 0;
 	double current_score;
 	double top_score = 0.0;
 	Player ** p = table->players;
@@ -114,15 +121,31 @@ void	table_winner(Table * table){
 		if(p[i]->fold == 0){
 			current_score = rank_hand(p[i]->hand, table->poker_hands)->cumulative_prob; 
 			if(current_score > top_score){
-				winner = i;
 				top_score = current_score;
 			}
 		}
 	}
-	
-	printf("%s has won the pot with %s.  $%d added to their chips.\n", p[winner]->name, rank_hand(p[winner]->hand, table->poker_hands)->desc, table->pot);
-	sleep(1);
-	p[winner]->chips = p[winner]->chips + table->pot;
+
+	for(i = 0; i < table->n_players; i++){
+		if(p[i]->fold == 0 && rank_hand(p[i]->hand, table->poker_hands)->cumulative_prob == top_score){
+			winner_count++;
+		}
+	}
+
+	for(i = 0; i < table->n_players; i++){
+		if(p[i]->fold == 0 && rank_hand(p[i]->hand, table->poker_hands)->cumulative_prob == top_score){
+			if(winner_count == 1){	
+				printf("%s has won the pot with %s.  $%d added to their chips.\n", p[i]->name, rank_hand(p[i]->hand, table->poker_hands)->desc, table->pot);
+				sleep(1);
+				p[i]->chips = p[i]->chips + table->pot;
+			}
+			else{
+				printf("%s will split the pot with %s. $%d added to their chips.\n",   p[i]->name, rank_hand(p[i]->hand, table->poker_hands)->desc, table->pot/winner_count);
+				p[i]->chips = p[i]->chips + (table->pot / winner_count);
+				sleep(1);
+			}
+		}
+	}
 	table->pot = 0;
 }
 

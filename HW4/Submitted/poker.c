@@ -9,8 +9,6 @@
 #include"hand_rank.h"
 #define WAIT 0
 
-/*test comment*/
-
 int main(int c, char * argv[]){
 
 	char  *player_name = (char*)malloc(sizeof(char) * 50);
@@ -79,7 +77,7 @@ int main(int c, char * argv[]){
 		}
 	}
 
-	printf("Thanks %s!  Initializing your game now!\n\n\n\n\n\n\n\n\n\n", player_name);
+	printf("Thanks %s!  Initializing your game now!\n\n", player_name);
 
 	table = init_table(player_name, n_players, limit, starting_amount, 100000);
 
@@ -99,13 +97,14 @@ int main(int c, char * argv[]){
 		table_unfold(table);
 		
 		table_deal(table);
-		
+	
+		printf("Collecting Antes\n\n");	
 		table_ante(table);
 
 		sleep(WAIT);
 		
+		printf("\n**********************************************************************************\n\n");
 		printf("Beginning First Round of Betting\n");
-		printf("\n**********************************************************************************\n");
 		table_bet(table);
 
 		if(table->players_n_folded > 1){
@@ -113,8 +112,6 @@ int main(int c, char * argv[]){
 			printf("\n**********************************************************************************\n");
 			printf("\nExchanging Cards...\n\n");
 			table_new_cards(table);
-			
-			table_zero_bets(table);
 			
 			printf("\n**********************************************************************************\n");
 			printf("\nBeginning Second Round of Betting\n\n");
@@ -135,7 +132,7 @@ int main(int c, char * argv[]){
 		table_return_cards(table);
 		
 		table_shift(table);
-
+			
 		table_remove_players(table);
 
 	}		

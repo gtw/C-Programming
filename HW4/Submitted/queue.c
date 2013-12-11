@@ -6,8 +6,8 @@
 int q_nq(Queue * queue, void * item){
 
         if(queue->n_items >= queue->size){
-/*                printf("Queue is filled.  Item has not been added to queue\n");
-  */              return -1;
+                printf("Queue is filled.  Item has not been added to queue\n");
+                return -1;
         }
 
         memcpy( ((char*)(queue->data)) + (queue->item_size * ((queue->n_items + queue->first_item)%queue->size)), item, queue->item_size);
@@ -57,6 +57,9 @@ int q_destroy(Queue * queue){
 
         return 0;
 }                
+
+/*	Moves the first object to the start of the space allocated for the queue while maintaining order.
+	Essentially allows me to use the queue as an array when I wish to */
 
 int q_realign(Queue * queue){
 

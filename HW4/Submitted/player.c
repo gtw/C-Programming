@@ -7,6 +7,8 @@
 #include "hand_rank.h"
 #define  WAIT 1
 
+/*	Used to get a single character from  the command line and clean out stdin afterwards*/
+
 int	user_letter(void){
 
 	int c;
@@ -18,6 +20,9 @@ int	user_letter(void){
 	
 	return first;
 }
+
+/*	Implements player betting logic.  You cannot raise more than 4 times. If no one raises for an
+	entire circle of the table the round of betting is over */
 
 int	player_bet(Player * player, int last_bet, int limit, int pot, int opponents, Hand_rank * poker_hands){
 
@@ -37,7 +42,7 @@ int	player_bet(Player * player, int last_bet, int limit, int pot, int opponents,
 		sleep(WAIT);
 		player->hand->print(player->hand);  
 		printf("Hand: %s\nStrength: %3.2f%%\n\n", player_hand_rank->desc, 100 * player_hand_rank->cumulative_prob);
-		printf("Pot: $%d     Your Chips: $%d     To Call: $%d     To Raise: $%d\n\n", pot, player->chips,call_amount, raise_amount);
+		printf("Pot: $%d     Your Chips: $%d     To Call: $%d     To Raise: $%d\n\n", pot, player->chips, last_bet, last_bet + limit);
 		sleep(WAIT);
 		printf("To call/check type 'c'.  To raise type 'r'. To fold type 'f'\n");
 		while(unacceptable_input){
