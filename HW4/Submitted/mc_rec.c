@@ -4,6 +4,7 @@
 #include "hand_rank.h"
 #include "mc_rec.h"
 
+
 short mc_recommend(Hand * hand, Hand_rank * poker_hands, int iterations, double (*scoring_function)(short trial_num, Hand * hand, void * scoring_data, Deck * deck, int iterations)){
 
 	short	recommendation, trial_recommendation;

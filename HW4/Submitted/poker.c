@@ -9,6 +9,8 @@
 #include"hand_rank.h"
 #define WAIT 0
 
+/*test comment*/
+
 int main(int c, char * argv[]){
 
 	char  *player_name = (char*)malloc(sizeof(char) * 50);
